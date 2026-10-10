@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>قصص لطيفة</title>
+<meta name="description" content="قصص مصورة للأطفال تُقرأ مثل الكتاب، تقلّب صفحاتها بيدك.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="قصص لطيفة">
+<meta property="og:description" content="قصص مصورة للأطفال تُقرأ مثل الكتاب">
+<meta property="og:image" content="https://lsy303.github.io/qisas-latifa/yawm-ghair-adi/share.jpg">
+<meta property="og:url" content="https://lsy303.github.io/qisas-latifa/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
+<meta name="theme-color" content="#121a33">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;800&family=Tajawal:wght@400;500;700&display=swap">
+<style>
+  /* Layout: a night-sky shelf; logo up top, story covers below like books on a shelf */
+  :root{
+    --night:#121a33; --night-2:#1c2650; --card:#fbf3e4; --ink:#4a2c0f;
+    --gold:#e8b54a; --pink:#f0568c; --sky:#5cb4f2; --mist:#c9cde0;
+    --display:"Baloo Bhaijaan 2","Tajawal","Segoe UI",Tahoma,sans-serif;
+    --body:"Tajawal","Segoe UI",Tahoma,"Geeza Pro",sans-serif;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    background:
+      radial-gradient(1.5px 1.5px at 12% 18%, rgba(255,255,255,.55) 50%, transparent 51%),
+      radial-gradient(1px 1px at 28% 8%, rgba(255,255,255,.45) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 71% 14%, rgba(232,181,74,.7) 50%, transparent 51%),
+      radial-gradient(1px 1px at 86% 26%, rgba(255,255,255,.5) 50%, transparent 51%),
+      radial-gradient(1px 1px at 52% 4%, rgba(255,255,255,.4) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 92% 7%, rgba(92,180,242,.6) 50%, transparent 51%),
+      radial-gradient(ellipse 90% 60% at 50% 0%, var(--night-2) 0%, var(--night) 70%);
+    background-color:var(--night);
+    background-attachment:fixed;
+    color:var(--card);
+    font-family:var(--body);
+    padding-inline:16px;
+    padding-block:0 calc(32px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:1040px;margin-inline:auto}
+
+  header{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding-block:28px 8px}
+  header img{width:clamp(150px,30vw,220px);height:auto;filter:drop-shadow(0 12px 28px rgba(0,0,0,.45))}
+  header p{font-size:clamp(15px,2.2vw,18px);color:var(--mist);max-width:34ch;line-height:1.7;text-wrap:balance}
+
+  .shelf-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    margin-block:28px 14px;padding-bottom:10px;border-bottom:1px solid rgba(232,181,74,.25)}
+  .shelf-head h2{font-family:var(--display);font-weight:800;font-size:clamp(20px,3vw,26px);color:var(--gold)}
+  .shelf-head span{font-size:14px;color:var(--mist);font-variant-numeric:tabular-nums}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:22px}
+
+  .story{display:flex;flex-direction:column;background:var(--card);color:var(--ink);border-radius:14px;
+    overflow:hidden;text-decoration:none;box-shadow:0 14px 34px rgba(0,0,0,.4);
+    transition:transform .25s ease, box-shadow .25s ease}
+  .story:hover,.story:focus-visible{transform:translateY(-4px);box-shadow:0 20px 44px rgba(0,0,0,.5);outline:none}
+  .story:focus-visible{box-shadow:0 0 0 3px var(--gold),0 20px 44px rgba(0,0,0,.5)}
+  .cover{position:relative;aspect-ratio:16/10;max-width:100%;background:#e9dcc3}
+  .cover img{width:100%;height:100%;object-fit:cover;display:block}
+  .badge{position:absolute;top:12px;inset-inline-start:12px;background:var(--pink);color:#fff;
+    font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.2px}
+  .info{display:flex;flex-direction:column;gap:6px;padding:16px 18px 18px;min-width:0}
+  .info h3{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.5;text-wrap:balance}
+  .info p{font-size:15px;line-height:1.7;color:#6b4a2a}
+  .meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}
+  .meta small{font-size:13px;color:#8a6a48;font-variant-numeric:tabular-nums}
+  .read{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--night);
+    font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px}
+  .read svg{width:16px;height:16px}
+
+  .soon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;
+    border:2px dashed rgba(232,181,74,.35);border-radius:14px;padding:28px 20px;min-height:220px;color:var(--mist)}
+  .soon b{font-family:var(--display);font-size:20px;color:var(--gold);font-weight:600}
+  .soon span{font-size:14px;line-height:1.7;max-width:26ch}
+
+  footer{margin-top:40px;text-align:center;font-size:13px;color:var(--mist);opacity:.8}
+  footer b{color:var(--gold);font-weight:700;letter-spacing:2px}
+
+  @media (prefers-reduced-motion:reduce){ .story{transition:none} .story:hover{transform:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="assets/logo.png" alt="قصص لطيفة" width="220" height="206">
+    <p>قصص مصورة للأطفال، تُقرأ مثل الكتاب وتقلّب صفحاتها بيدك.</p>
+  </header>
+
+  <section aria-labelledby="shelf-title">
+    <div class="shelf-head">
+      <h2 id="shelf-title">مكتبة القصص</h2>
+      <span id="count"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <footer>قصص لطيفة · <b>LSY</b></footer>
+</div>
+
+<script src="stories.js"></script>
+<script>
+  const list = window.STORIES || [];
+  const grid = document.getElementById('grid');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+
+  grid.innerHTML = list.map(s => `
+    <a class="story" href="${esc(s.folder)}/">
+      <div class="cover">
+        <img src="${esc(s.cover)}" alt="غلاف قصة ${esc(s.title)}" loading="lazy">
+        ${s.isNew ? '<span class="badge">جديدة</span>' : ''}
+      </div>
+      <div class="info">
+        <h3>${esc(s.title)}</h3>
+        ${s.blurb ? `<p>${esc(s.blurb)}</p>` : ''}
+        <div class="meta">
+          <small>${s.pages ? s.pages + ' صفحة' : ''}</small>
+          <span class="read">اقرأ القصة ${arrow}</span>
+        </div>
+      </div>
+    </a>`).join('') + `
+    <div class="soon"><b>قصص جديدة قريباً</b><span>تابعونا، كل قصة جديدة تنضاف هنا.</span></div>`;
+
+  const n = list.length;
+  document.getElementById('count').textContent = n === 1 ? 'قصة واحدة' : n === 2 ? 'قصتان' : n <= 10 ? n + ' قصص' : n + ' قصة';
+</script>
+</body>
+</html>
