@@ -90,7 +90,7 @@
 <div class="wrap">
   <header>
     <img src="assets/logo.png" alt="قصص لطيفة" width="220" height="206">
-    <p>قصص مصورة للأطفال، تُقرأ مثل الكتاب وتقلّب صفحاتها بيدك.</p>
+    <p id="tagline">قصص مصورة للأطفال، تُقرأ مثل الكتاب وتقلّب صفحاتها بيدك.</p>
   </header>
 
   <section aria-labelledby="shelf-title">
@@ -101,12 +101,16 @@
     <div class="grid" id="grid"></div>
   </section>
 
-  <footer>قصص لطيفة · <b>LSY</b></footer>
+  <footer id="footer">قصص لطيفة · <b>LSY</b></footer>
 </div>
 
 <script>document.write('<script src="stories.js?v='+Date.now()+'"><\/script>');</script>
 <script>
   const list = window.STORIES || [];
+  const site = window.SITE || {};
+  const setText = (id, v) => { if (v) document.getElementById(id).textContent = v; };
+  setText('tagline', site.tagline); setText('shelf-title', site.shelfTitle);
+  if (site.footer) document.getElementById('footer').textContent = site.footer;
   const grid = document.getElementById('grid');
   const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
@@ -126,7 +130,7 @@
         </div>
       </div>
     </a>`).join('') + `
-    <div class="soon"><b>قصص جديدة قريباً</b><span>تابعونا، كل قصة جديدة تنضاف هنا.</span></div>`;
+    <div class="soon"><b>${esc(site.soonTitle||'قصص جديدة قريباً')}</b><span>${esc(site.soonText||'تابعونا، كل قصة جديدة تنضاف هنا.')}</span></div>`;
 
   const n = list.length;
   document.getElementById('count').textContent = n === 1 ? 'قصة واحدة' : n === 2 ? 'قصتان' : n <= 10 ? n + ' قصص' : n + ' قصة';

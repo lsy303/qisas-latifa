@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة التحكم | قصص لطيفة</title>
+<link rel="icon" href="assets/icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;800&family=Tajawal:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --night:#121a33; --night-2:#1c2650; --panel:#1a2347; --line:rgba(232,181,74,.22);
+    --card:#fbf3e4; --gold:#e8b54a; --pink:#f0568c; --sky:#5cb4f2; --mist:#c9cde0;
+    --ok:#4cc38a; --err:#ff7a7a;
+    --display:"Baloo Bhaijaan 2","Tajawal","Segoe UI",Tahoma,sans-serif;
+    --body:"Tajawal","Segoe UI",Tahoma,"Geeza Pro",sans-serif;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(ellipse 90% 60% at 50% 0%, var(--night-2) 0%, var(--night) 70%) fixed;
+    background-color:var(--night);color:var(--card);font-family:var(--body);padding:0 16px 48px;line-height:1.6}
+  .wrap{max-width:860px;margin-inline:auto}
+  header{display:flex;align-items:center;gap:14px;padding:22px 0 10px}
+  header img{width:64px;height:auto}
+  header h1{font-family:var(--display);font-weight:800;font-size:26px;color:var(--gold)}
+  header a{margin-inline-start:auto;color:var(--mist);font-size:14px;text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 18px}
+  .tabs button{font:inherit;font-weight:700;font-size:15px;background:transparent;color:var(--mist);border:1px solid var(--line);
+    padding:9px 16px;border-radius:999px;cursor:pointer}
+  .tabs button.on{background:var(--gold);color:var(--night);border-color:var(--gold)}
+  section{display:none}
+  section.on{display:block}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+  .box h2{font-family:var(--display);font-size:20px;color:var(--gold);margin-bottom:6px}
+  .hint{font-size:14px;color:var(--mist)}
+  .hint ol{padding-inline-start:20px;margin-top:6px}
+  .hint li{margin:3px 0}
+  .hint a{color:var(--sky)}
+  label{display:block;font-size:14px;color:var(--mist);margin:12px 0 5px}
+  input[type=text],input[type=password],textarea,select{width:100%;font:inherit;font-size:16px;color:var(--card);
+    background:#10173a;border:1px solid rgba(201,205,224,.25);border-radius:10px;padding:10px 12px}
+  textarea{min-height:64px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .btn{font:inherit;font-weight:700;font-size:15px;border:0;border-radius:999px;padding:10px 20px;cursor:pointer;
+    background:var(--gold);color:var(--night)}
+  .btn.ghost{background:transparent;color:var(--card);border:1px solid rgba(201,205,224,.35)}
+  .btn.small{padding:6px 12px;font-size:13px}
+  .btn.danger{background:transparent;color:var(--err);border:1px solid rgba(255,122,122,.45)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .story{display:grid;grid-template-columns:120px 1fr;gap:14px;background:#10173a;border:1px solid rgba(201,205,224,.15);
+    border-radius:14px;padding:12px;margin-top:12px}
+  .story img{width:120px;aspect-ratio:16/10;object-fit:cover;border-radius:8px;background:#2a3360}
+  .story .tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+  .story .folder{font-size:12px;color:var(--mist);direction:ltr;text-align:right}
+  .check{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--card);margin:0}
+  @media (max-width:560px){ .story{grid-template-columns:1fr} .story img{width:100%} }
+  #status{margin-top:14px;padding:12px 16px;border-radius:12px;font-size:15px;display:none;
+    background:#0d1330;border:1px solid var(--line)}
+  #status.ok{display:block;border-color:var(--ok);color:var(--ok)}
+  #status.err{display:block;border-color:var(--err);color:var(--err)}
+  #status.work{display:block;color:var(--card)}
+  progress{width:100%;height:10px;margin-top:8px;accent-color:var(--gold)}
+  .pill{display:inline-block;font-size:12px;padding:2px 10px;border-radius:999px;background:rgba(76,195,138,.15);color:var(--ok)}
+  .pill.no{background:rgba(255,122,122,.12);color:var(--err)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="assets/icon.png" alt="">
+    <h1>لوحة التحكم</h1>
+    <a href="./" target="_blank">فتح الموقع ↗</a>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button data-tab="stories" class="on">القصص</button>
+    <button data-tab="upload">إضافة / تحديث قصة</button>
+    <button data-tab="texts">نصوص الصفحة الرئيسية</button>
+    <button data-tab="key">مفتاح الدخول <span id="keyPill" class="pill no">غير مضبوط</span></button>
+  </div>
+
+  <!-- KEY -->
+  <section id="tab-key">
+    <div class="box">
+      <h2>مفتاح الدخول (مرة واحدة فقط)</h2>
+      <div class="hint">
+        اللوحة تحتاج مفتاح من GitHub عشان تقدر تحفظ في الموقع. يتحفظ في هذا المتصفح بس، ولا يشوفه أحد.
+        <ol>
+          <li>افتح <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">صفحة إنشاء مفتاح جديد</a> (وأنت مسجل دخول في GitHub).</li>
+          <li><b>Token name:</b> اكتب أي اسم، مثلاً: qisas-admin. <b>Expiration:</b> اختر المدة اللي تبيها (مثلاً سنة).</li>
+          <li><b>Repository access:</b> اختر <b>Only select repositories</b> ثم اختر <b>qisas-latifa</b>.</li>
+          <li><b>Permissions:</b> افتح Repository permissions وخل <b>Contents</b> على <b>Read and write</b>.</li>
+          <li>اضغط <b>Generate token</b>، انسخ المفتاح (يبدأ بـ github_pat_) والصقه هنا.</li>
+        </ol>
+      </div>
+      <label for="token">المفتاح</label>
+      <input type="password" id="token" placeholder="github_pat_..." autocomplete="off" dir="ltr">
+      <div class="actions">
+        <button class="btn" id="saveToken">حفظ وتجربة</button>
+        <button class="btn ghost" id="clearToken">مسح المفتاح من هذا الجهاز</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORIES -->
+  <section id="tab-stories" class="on">
+    <div class="box">
+      <h2>القصص في الموقع</h2>
+      <p class="hint">عدّل العنوان والوصف، رتّب القصص، وحدد الجديدة. بعدها اضغط «حفظ التغييرات».</p>
+      <div id="storyList"><p class="hint" style="margin-top:12px">جارٍ التحميل…</p></div>
+      <div class="actions">
+        <button class="btn" id="saveStories" disabled>حفظ التغييرات</button>
+        <button class="btn ghost" id="reload">إعادة تحميل</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPLOAD -->
+  <section id="tab-upload">
+    <div class="box">
+      <h2>إضافة قصة جديدة أو تحديث صفحات قصة</h2>
+      <p class="hint">صدّر القصة من كانفا PDF، واختره هنا. اللوحة تحوّله لكتاب يتقلّب وترفعه للموقع.</p>
+
+      <label for="mode">العملية</label>
+      <select id="mode"><option value="new">قصة جديدة</option></select>
+
+      <div id="newFields">
+        <label for="nTitle">عنوان القصة</label>
+        <input type="text" id="nTitle" placeholder="مثال: لَمْ يَكُنْ يَوْمًا عَادِيًّا">
+        <label for="nBlurb">الوصف تحت العنوان</label>
+        <input type="text" id="nBlurb" placeholder="مثال: قصة فيصل ويومه في حلقة المسجد.">
+        <label for="nFolder">اسم الرابط (بالإنجليزي، بدون مسافات)</label>
+        <input type="text" id="nFolder" dir="ltr" placeholder="my-new-story">
+        <p class="hint" id="nUrl" dir="ltr" style="text-align:right"></p>
+        <label class="check" style="margin-top:12px"><input type="checkbox" id="nNew" checked> علامة «جديدة» عليها (وتنشال من الباقي)</label>
+      </div>
+
+      <label for="pdf">ملف PDF</label>
+      <input type="file" id="pdf" accept="application/pdf">
+      <div class="actions">
+        <button class="btn" id="publish">نشر في الموقع</button>
+      </div>
+      <progress id="prog" value="0" max="100" hidden></progress>
+    </div>
+  </section>
+
+  <!-- TEXTS -->
+  <section id="tab-texts">
+    <div class="box">
+      <h2>نصوص الصفحة الرئيسية</h2>
+      <label for="sTagline">الجملة تحت الشعار</label>
+      <textarea id="sTagline"></textarea>
+      <label for="sShelf">عنوان المكتبة</label>
+      <input type="text" id="sShelf">
+      <label for="sSoonT">عنوان مربع «قريباً»</label>
+      <input type="text" id="sSoonT">
+      <label for="sSoonX">نص مربع «قريباً»</label>
+      <input type="text" id="sSoonX">
+      <label for="sFooter">النص أسفل الصفحة</label>
+      <input type="text" id="sFooter">
+      <div class="actions"><button class="btn" id="saveTexts" disabled>حفظ النصوص</button></div>
+    </div>
+  </section>
+
+  <div id="status" role="status" aria-live="polite"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+const OWNER = 'lsy303', REPO = 'qisas-latifa', BRANCH = 'main';
+const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+const SITE_URL = `https://${OWNER}.github.io/${REPO}/`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const $ = id => document.getElementById(id);
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+                set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+                del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
+let TOKEN = store.get('ql_token') || '';
+let STORIES = [], SITE = {}, TREE = [];
+
+/* ---------- UI helpers ---------- */
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+function showTab(t){
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === 'tab-' + t));
+}
+function status(msg, kind='work'){ const s = $('status'); s.className = kind; s.textContent = msg; }
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* ---------- base64 / utf8 ---------- */
+const utf8ToB64 = str => { const b = new TextEncoder().encode(str); let s=''; for (let i=0;i<b.length;i+=0x8000) s += String.fromCharCode.apply(null, b.subarray(i,i+0x8000)); return btoa(s); };
+const b64ToUtf8 = b64 => { const bin = atob(b64.replace(/\n/g,'')); const u = new Uint8Array(bin.length); for (let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new TextDecoder().decode(u); };
+const blobToB64 = blob => new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result.split(',')[1]); fr.readAsDataURL(blob); });
+
+/* ---------- GitHub API ---------- */
+async function gh(path, opts={}){
+  const res = await fetch(API + path, { ...opts, headers: { 'Authorization': 'Bearer ' + TOKEN,
+    'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json', ...(opts.headers||{}) } });
+  if (!res.ok){
+    let m = res.status + '';
+    try { m += ' — ' + (await res.json()).message; } catch(e){}
+    if (res.status === 401) m = 'المفتاح غير صحيح أو منتهي. اضبطه من تبويب «مفتاح الدخول».';
+    if (res.status === 403 || res.status === 404) m = 'المفتاح ما عنده صلاحية الكتابة على qisas-latifa. تأكد من Contents: Read and write. (' + m + ')';
+    throw new Error(m);
+  }
+  return res.status === 204 ? null : res.json();
+}
+async function headCommit(){
+  const ref = await gh(`/git/ref/heads/${BRANCH}`);
+  const commit = await gh(`/git/commits/${ref.object.sha}`);
+  return { sha: ref.object.sha, tree: commit.tree.sha };
+}
+async function readText(path){
+  const e = TREE.find(t => t.path === path);
+  if (!e) return null;
+  const b = await gh(`/git/blobs/${e.sha}`);
+  return b64ToUtf8(b.content);
+}
+/* files: [{path, text} | {path, b64}] -> one commit */
+async function commitFiles(files, message, onProgress){
+  const head = await headCommit();
+  const tree = [];
+  for (let i=0;i<files.length;i++){
+    const f = files[i];
+    const blob = await gh('/git/blobs', { method:'POST', body: JSON.stringify(
+      f.b64 != null ? { content: f.b64, encoding: 'base64' } : { content: utf8ToB64(f.text), encoding: 'base64' }) });
+    tree.push({ path: f.path, mode: '100644', type: 'blob', sha: blob.sha });
+    onProgress && onProgress(i+1, files.length);
+  }
+  const t = await gh('/git/trees', { method:'POST', body: JSON.stringify({ base_tree: head.tree, tree }) });
+  const c = await gh('/git/commits', { method:'POST', body: JSON.stringify({ message, tree: t.sha, parents: [head.sha] }) });
+  await gh(`/git/refs/heads/${BRANCH}`, { method:'PATCH', body: JSON.stringify({ sha: c.sha }) });
+}
+
+/* ---------- stories.js ---------- */
+function parseStories(code){
+  const w = {}; new Function('window', code)(w);
+  return { stories: w.STORIES || [], site: w.SITE || {} };
+}
+const q = s => JSON.stringify(String(s ?? ''));
+function buildStoriesJs(list, site){
+  const items = list.map(s => {
+    const lines = [`    folder: ${q(s.folder)}`, `    title: ${q(s.title)}`];
+    if (s.blurb) lines.push(`    blurb: ${q(s.blurb)}`);
+    lines.push(`    cover: ${q(s.cover)}`);
+    if (s.pages) lines.push(`    pages: ${Number(s.pages)}`);
+    if (s.isNew) lines.push(`    isNew: true`);
+    return '  {\n' + lines.join(',\n') + '\n  }';
+  }).join(',\n');
+  return `/*
+  قائمة القصص ونصوص الصفحة الرئيسية.
+  الأسهل تعدّلها من لوحة التحكم: ${SITE_URL}admin.html
+*/
+window.STORIES = [
+${items}
+];
+
+/* نصوص الصفحة الرئيسية */
+window.SITE = {
+  tagline: ${q(site.tagline)},
+  shelfTitle: ${q(site.shelfTitle)},
+  soonTitle: ${q(site.soonTitle)},
+  soonText: ${q(site.soonText)},
+  footer: ${q(site.footer)}
+};
+`;
+}
+
+/* ---------- load ---------- */
+async function loadAll(){
+  if (!TOKEN){ $('storyList').innerHTML = '<p class="hint" style="margin-top:12px">اضبط مفتاح الدخول أولاً.</p>'; showTab('key'); return; }
+  status('جارٍ تحميل بيانات الموقع…');
+  const head = await headCommit();
+  TREE = (await gh(`/git/trees/${head.tree}?recursive=1`)).tree;
+  const code = await readText('stories.js');
+  ({ stories: STORIES, site: SITE } = parseStories(code || ''));
+  SITE = Object.assign({ tagline:'قصص مصورة للأطفال، تُقرأ مثل الكتاب وتقلّب صفحاتها بيدك.', shelfTitle:'مكتبة القصص',
+    soonTitle:'قصص جديدة قريباً', soonText:'تابعونا، كل قصة جديدة تنضاف هنا.', footer:'قصص لطيفة · LSY' }, SITE);
+  STORIES.forEach(s => s._origTitle = s.title);
+  renderStories(); renderTexts(); renderModes();
+  $('saveStories').disabled = false; $('saveTexts').disabled = false;
+  $('keyPill').className = 'pill'; $('keyPill').textContent = 'مضبوط';
+  status('جاهز ✓', 'ok');
+}
+
+function renderStories(){
+  if (!STORIES.length){ $('storyList').innerHTML = '<p class="hint" style="margin-top:12px">ما فيه قصص بعد.</p>'; return; }
+  $('storyList').innerHTML = STORIES.map((s,i) => `
+    <div class="story">
+      <img src="${esc(SITE_URL + s.cover)}" alt="">
+      <div>
+        <div class="folder">${esc(s.folder)}/</div>
+        <label for="t${i}">العنوان</label>
+        <input type="text" id="t${i}" value="${esc(s.title)}" data-i="${i}" data-k="title">
+        <label for="b${i}">الوصف</label>
+        <input type="text" id="b${i}" value="${esc(s.blurb)}" data-i="${i}" data-k="blurb">
+        <div class="tools">
+          <label class="check"><input type="checkbox" ${s.isNew?'checked':''} data-i="${i}" data-k="isNew"> جديدة</label>
+          <button class="btn ghost small" data-move="-1" data-i="${i}" ${i===0?'disabled':''}>↑ فوق</button>
+          <button class="btn ghost small" data-move="1" data-i="${i}" ${i===STORIES.length-1?'disabled':''}>↓ تحت</button>
+          <a class="btn ghost small" href="${esc(SITE_URL + s.folder)}/" target="_blank" style="text-decoration:none">فتح</a>
+          <button class="btn danger small" data-del="${i}">إخفاء من الموقع</button>
+        </div>
+      </div>
+    </div>`).join('');
+  $('storyList').querySelectorAll('input[data-k]').forEach(el => el.oninput = el.onchange = () => {
+    const s = STORIES[+el.dataset.i]; s[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  $('storyList').querySelectorAll('[data-move]').forEach(b => b.onclick = () => {
+    const i = +b.dataset.i, j = i + (+b.dataset.move); [STORIES[i], STORIES[j]] = [STORIES[j], STORIES[i]]; renderStories();
+  });
+  $('storyList').querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+    const s = STORIES[+b.dataset.del];
+    if (confirm(`إخفاء «${s.title}» من الصفحة الرئيسية؟\n(ملفات القصة تبقى، وتقدر ترجعها بإضافتها من جديد)`)){ STORIES.splice(+b.dataset.del,1); renderStories(); }
+  });
+}
+function renderTexts(){
+  $('sTagline').value = SITE.tagline; $('sShelf').value = SITE.shelfTitle;
+  $('sSoonT').value = SITE.soonTitle; $('sSoonX').value = SITE.soonText; $('sFooter').value = SITE.footer;
+}
+function renderModes(){
+  $('mode').innerHTML = '<option value="new">قصة جديدة</option>' +
+    STORIES.map(s => `<option value="${esc(s.folder)}">تحديث صفحات: ${esc(s.title)} — ${esc(s.blurb||s.folder)}</option>`).join('');
+  $('mode').onchange();
+}
+$('mode').onchange = () => { $('newFields').style.display = $('mode').value === 'new' ? '' : 'none'; };
+$('nFolder').oninput = () => {
+  const v = $('nFolder').value = $('nFolder').value.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-');
+  $('nUrl').textContent = v ? SITE_URL + v + '/' : '';
+};
+
+/* ---------- patch story page title ---------- */
+function patchPageTitle(html, title, blurb){
+  const e = esc(title);
+  html = html.replace(/<h1>[\s\S]*?<\/h1>/, `<h1>${e}</h1>`)
+             .replace(/<title>[\s\S]*?<\/title>/, `<title>${e} | قصص لطيفة</title>`)
+             .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${e}$2`);
+  if (blurb) html = html.replace(/(<meta name="description" content=")[^"]*(")/, `$1${esc(blurb)}$2`)
+                        .replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${esc(blurb)}$2`);
+  return html;
+}
+
+/* ---------- save stories ---------- */
+$('saveStories').onclick = async () => {
+  const btn = $('saveStories'); btn.disabled = true;
+  try{
+    status('جارٍ الحفظ…');
+    const files = [{ path: 'stories.js', text: buildStoriesJs(STORIES, SITE) }];
+    for (const s of STORIES){
+      if (s.title !== s._origTitle){
+        const html = await readText(s.folder + '/index.html');
+        if (html) files.push({ path: s.folder + '/index.html', text: patchPageTitle(html, s.title, s.blurb) });
+      }
+    }
+    await commitFiles(files, 'تحديث قائمة القصص من لوحة التحكم');
+    STORIES.forEach(s => s._origTitle = s.title);
+    status('انحفظ ✓ — يظهر في الموقع خلال دقيقة أو دقيقتين.', 'ok');
+    await reloadTree();
+  }catch(e){ status('ما انحفظ: ' + e.message, 'err'); }
+  btn.disabled = false;
+};
+$('saveTexts').onclick = async () => {
+  const btn = $('saveTexts'); btn.disabled = true;
+  SITE = { tagline:$('sTagline').value.trim(), shelfTitle:$('sShelf').value.trim(), soonTitle:$('sSoonT').value.trim(),
+           soonText:$('sSoonX').value.trim(), footer:$('sFooter').value.trim() };
+  try{
+    status('جارٍ الحفظ…');
+    await commitFiles([{ path:'stories.js', text: buildStoriesJs(STORIES, SITE) }], 'تحديث نصوص الصفحة الرئيسية');
+    status('انحفظت النصوص ✓ — تظهر خلال دقيقة أو دقيقتين.', 'ok');
+    await reloadTree();
+  }catch(e){ status('ما انحفظ: ' + e.message, 'err'); }
+  btn.disabled = false;
+};
+async function reloadTree(){ const h = await headCommit(); TREE = (await gh(`/git/trees/${h.tree}?recursive=1`)).tree; }
+
+/* ---------- PDF -> flipbook ---------- */
+const canvasToB64 = (c, q=.82) => new Promise(r => c.toBlob(async b => r(await blobToB64(b)), 'image/jpeg', q));
+function resized(src, w){ const c = document.createElement('canvas'); c.width = w; c.height = Math.round(src.height*w/src.width);
+  const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(src,0,0,c.width,c.height); return c; }
+
+$('publish').onclick = async () => {
+  const file = $('pdf').files[0];
+  const mode = $('mode').value, isNewStory = mode === 'new';
+  let folder, title, blurb;
+  if (isNewStory){
+    title = $('nTitle').value.trim(); blurb = $('nBlurb').value.trim(); folder = $('nFolder').value.replace(/^-|-$/g,'');
+    if (!title) return status('اكتب عنوان القصة.', 'err');
+    if (!folder) return status('اكتب اسم الرابط بالإنجليزي.', 'err');
+    if (STORIES.some(s => s.folder === folder) || TREE.some(t => t.path === folder))
+      return status('اسم الرابط مستخدم. اختر اسم ثاني، أو اختر «تحديث صفحات» من القائمة.', 'err');
+  } else {
+    const s = STORIES.find(s => s.folder === mode); folder = s.folder; title = s.title; blurb = s.blurb;
+  }
+  if (!file) return status('اختر ملف PDF.', 'err');
+
+  const btn = $('publish'), prog = $('prog'); btn.disabled = true; prog.hidden = false; prog.value = 0;
+  try{
+    status('جارٍ قراءة الـ PDF…');
+    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    const N = pdf.numPages, W = 1600, v = Date.now().toString(36);
+    const files = [], spreads = []; let H = 900, cover = null;
+    for (let p=1; p<=N; p++){
+      status(`جارٍ تجهيز الصفحة ${p} من ${N}…`);
+      const page = await pdf.getPage(p);
+      const vp0 = page.getViewport({ scale: 1 });
+      const vp = page.getViewport({ scale: W / vp0.width });
+      const c = document.createElement('canvas'); c.width = W; c.height = Math.round(vp.height); H = c.height;
+      await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+      if (p === 1) cover = c;
+      const nn = String(p).padStart(2,'0');
+      for (const [side, x] of [['a',0],['b',W/2]]){
+        const h = document.createElement('canvas'); h.width = W/2; h.height = H;
+        h.getContext('2d').drawImage(c, x, 0, W/2, H, 0, 0, W/2, H);
+        files.push({ path: `${folder}/p${nn}-${side}.jpg`, b64: await canvasToB64(h) });
+      }
+      spreads.push([`p${nn}-a.jpg?v=${v}`, `p${nn}-b.jpg?v=${v}`]);
+      prog.value = Math.round(p / N * 40);
+    }
+    files.push({ path: `${folder}/cover.jpg`, b64: await canvasToB64(resized(cover, 800)) });
+    files.push({ path: `${folder}/share.jpg`, b64: await canvasToB64(resized(cover, 1200), .8) });
+
+    status('جارٍ تجهيز صفحة القصة…');
+    const tplRes = await fetch('_template/reader.html?v=' + v);
+    if (!tplRes.ok) throw new Error('ما لقيت ملف القالب _template/reader.html في الموقع.');
+    const e = esc;
+    const html = (await tplRes.text())
+      .replace('__SPREADS__', JSON.stringify(spreads))
+      .replace('__RATIO__', `${H}/${W}`)
+      .replace('__N__', String(N))
+      .replaceAll('__TITLE__', e(title))
+      .replaceAll('__DESC__', e(blurb || 'قصة مصورة من قصص لطيفة'))
+      .replaceAll('__FOLDER__', folder);
+    files.push({ path: `${folder}/index.html`, text: html });
+
+    const coverPath = `${folder}/cover.jpg?v=${v}`;
+    let list = STORIES.map(s => ({...s}));
+    if (isNewStory){
+      const nw = $('nNew').checked;
+      if (nw) list.forEach(s => s.isNew = false);
+      list.unshift({ folder, title, blurb, cover: coverPath, pages: N, isNew: nw });
+    } else {
+      list = list.map(s => s.folder === folder ? { ...s, cover: coverPath, pages: N } : s);
+    }
+    files.push({ path: 'stories.js', text: buildStoriesJs(list, SITE) });
+
+    await commitFiles(files, (isNewStory ? 'إضافة قصة: ' : 'تحديث صفحات: ') + title, (i, n) => {
+      prog.value = 40 + Math.round(i / n * 60); status(`جارٍ الرفع ${i} من ${n}…`);
+    });
+    STORIES = list; STORIES.forEach(s => s._origTitle = s.title);
+    renderStories(); renderModes(); await reloadTree();
+    prog.value = 100;
+    status(`تم النشر ✓ — القصة تظهر خلال دقيقة أو دقيقتين: ${SITE_URL}${folder}/`, 'ok');
+    if (isNewStory){ $('nTitle').value = $('nBlurb').value = $('nFolder').value = ''; $('nUrl').textContent = ''; }
+    $('pdf').value = '';
+  }catch(err){ status('ما تم النشر: ' + err.message, 'err'); }
+  btn.disabled = false;
+};
+
+/* ---------- token ---------- */
+$('token').value = TOKEN;
+$('saveToken').onclick = async () => {
+  TOKEN = $('token').value.trim(); store.set('ql_token', TOKEN);
+  try{ await loadAll(); showTab('stories'); }catch(e){ status(e.message, 'err'); }
+};
+$('clearToken').onclick = () => { store.del('ql_token'); TOKEN = ''; $('token').value = '';
+  $('keyPill').className = 'pill no'; $('keyPill').textContent = 'غير مضبوط'; status('انمسح المفتاح من هذا الجهاز.', 'ok'); };
+$('reload').onclick = () => loadAll().catch(e => status(e.message, 'err'));
+
+loadAll().catch(e => status(e.message, 'err'));
+</script>
+</body>
+</html>
