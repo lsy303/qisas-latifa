@@ -1,14 +1,13 @@
 /*
-  قائمة القصص — لإضافة قصة جديدة:
-  1) ارفع مجلد القصة (فيه index.html و cover.jpg)
-  2) أضف سطراً جديداً في أعلى القائمة بنفس الشكل
+  قائمة القصص ونصوص الصفحة الرئيسية.
+  الأسهل تعدّلها من لوحة التحكم: https://lsy303.github.io/qisas-latifa/admin.html
 */
 window.STORIES = [
   {
     folder: "yawm-ghair-adi-faisal",
     title: "لَمْ يَكُنْ يَوْمًا عَادِيًّا",
     blurb: "قصة فيصل ويومه في حلقة المسجد.",
-    cover: "yawm-ghair-adi-faisal/cover.jpg",
+    cover: "yawm-ghair-adi-faisal/cover.jpg?v=mvxwqp59",
     pages: 20,
     isNew: true
   },
