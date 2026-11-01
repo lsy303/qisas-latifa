@@ -424,10 +424,10 @@ $('publish').onclick = async () => {
     files.push({ path: `${folder}/share.jpg`, b64: await canvasToB64(resized(cover, 1200), .8) });
 
     status('جارٍ تجهيز صفحة القصة…');
-    const tplRes = await fetch('_template/reader.html?v=' + v);
-    if (!tplRes.ok) throw new Error('ما لقيت ملف القالب _template/reader.html في الموقع.');
+    const tpl = await readText('_template/reader.html');
+    if (!tpl) throw new Error('ما لقيت ملف القالب _template/reader.html في المستودع.');
     const e = esc;
-    const html = (await tplRes.text())
+    const html = tpl
       .replace('__SPREADS__', JSON.stringify(spreads))
       .replace('__RATIO__', `${H}/${W}`)
       .replace('__N__', String(N))
